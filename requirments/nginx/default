@@ -1,11 +1,24 @@
 server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        root /var/www/html;
-        index index.php index.nginx-debian.html;
-        
-        location ~ .php$ {
+
+	listen 443 ssl;
+	listen [::]:443 ssl; #v6に対応
+
+	server_name smaei.42.fr;
+
+	ssl_certificate /etc/nginx/ssl/crt.pem;
+    ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+
+	ssl_protocols TLSv1.3;
+
+	root /var/www/html;
+	index index.php index.nginx-debian.html;
+
+
+	location ~ .php$ {
     	include snippets/fastcgi-php.conf;
     	fastcgi_pass wordpress:9000;
-        }
+		include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+	}
 }

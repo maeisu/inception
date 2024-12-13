@@ -1,5 +1,8 @@
 FROM debian:bullseye
 
-RUN apt-get update && apt-get install -y nginx vim
+RUN apt-get update && apt-get install -y nginx openssl vim
 
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+COPY ./nginx_init.sh /
+RUN chmod +x /nginx_init.sh
+
+CMD ["/nginx_init.sh"]
